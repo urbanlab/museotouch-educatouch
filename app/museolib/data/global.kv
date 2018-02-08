@@ -1,0 +1,143 @@
+#:kivy 1.0
+#: import Window kivy.core.window.Window
+#: import random random
+#:set futura 'FuturaLT.ttf'
+#:set futuraBold 'FuturaLT-Bold.ttf'
+#: import os os
+
+
+<ExpoItem>:
+	size_hint: None,None
+	height: Window.width/8.7
+	width: self.height
+	# orientation: 'vertical'
+	# spacing: 0
+	# padding: 0
+	# on_touch_down: ctx.selector.select_expo(ctx) if self.collide_point(*args[1].pos) else None
+	# on_press: self.on_press()
+	# on_release: self.launch_expo()
+
+	canvas:
+		Color:
+			rgba: (1,1,1,1) if root.expo.get('no_img', '') else (0,0,0,0)
+		Rectangle:
+			pos: self.center_x - 75, self.center_y - 75
+			size: 150,150
+
+
+	Image:
+		id: main_img
+		pos:root.pos
+		source: root.expo.get('data', '')
+		size_hint: None, None
+		size: root.width, root.height
+		allow_stretch: True
+		keep_ratio: False
+		center: root.center
+		color: (1,1,1,1)
+	Label:
+		id:main_label
+		text: root.expo.get('name', '').upper()
+		size_hint: None,None
+		text_size: self.width, None
+		size: root.width - 20, self.texture_size[1]
+		halign: 'left'
+		valign: 'bottom'
+		markup: True
+		font_name: futuraBold
+		pos: root.x + 10, root.y + 10
+		opacity:0
+		on_touch_up:self.opacity=0
+		
+		canvas.before:
+			Color:
+				rgba: root.color
+			Rectangle:
+				pos: main_img.pos
+				size: main_img.width, main_img.height
+<ExpoPopupChoice>:
+	list_expos: list_expos
+	orientation: 'vertical'
+	size_hint: None, None
+	size: Window.size
+	canvas:
+		Color: 
+			rgb: 0,0,0
+		Rectangle:
+			pos: self.pos
+			size: self.size
+
+	GridLayout:
+		id: list_expos
+		size_hint: None, None
+		# height: self.minimum_height
+		# height: 700
+		width: Window.width
+		cols: 8
+		spacing: 15
+		padding: 15
+
+	# AnchorLayout:
+	# 	StackLayout:
+	# 		size_hint: None, None
+	# 		orientation: 'lr-tb'
+	# 		width: 150
+
+	# 		Label:
+	# 			text: 'Code exposition'
+	# 			height: self.texture_size[1] + 10
+
+	# 		TextInput:
+	# 			size_hint_y: None
+	# 			multiline: False
+	# 			height: 30
+
+		
+<KeywordsGroup>:
+	cols: 2
+
+<SplashScreen>:
+	Image:
+		id:img
+		size_hint: None, None
+		source:'splash.png'
+		size:root.size
+	Button:
+		on_release: root.quit()
+		size:64,64
+		size_hint: None,None
+		pos_hint:{'right': 1, 'top': 1}
+		background_normal: 'quit.png'
+		background_down:'quit_down.png'
+	Button:
+		on_release: root.previous()
+		size:48,48
+		size_hint: None,None
+		pos_hint:{'left': 1, 'top': 0.5}
+		background_normal: 'previous.png'
+		background_down:'previous_down.png'
+	Button:
+		on_release: root.next()
+		size:48,48
+		size_hint: None,None
+		pos_hint:{'right': 1, 'top': 0.5}
+		background_normal: 'next.png'
+		background_down:'next_down.png'
+
+<Tutorial>:
+	# pos:(0,Window.height*0.5)
+	pos_hint:{'y':0,'x':0.1}
+	Image:
+		id:tuto
+		size:(Window.height*0.7,Window.height)
+		# pos:(500,300)
+		size_hint: None, None
+		source:root.img_path
+		# size:root.img_size
+	FloatLayout:
+		id:tuto_container
+		Label:
+			id:label
+			font_size:Window.width*0.02
+			text:root.text
+			pos:(self.parent.x,Window.height*0.25)
